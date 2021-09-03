@@ -1,6 +1,9 @@
 import React from 'react';
 import './ImageGallery.css';
 import Button from '../Button/Button';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const API_KEY = '18976162-4407e31cd80a0810b100a4c9f';
 
@@ -22,9 +25,23 @@ class ImageGallery extends React.Component {
             this.setState({ status: 'pending', page: 1, pictures: null })
 
             fetch(`https://pixabay.com/api/?q=${nextPicture}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
-                .then(res => res.json())
+                .then(res => {
+                    if (res.ok) {
+                        return res.json();
+                    }
+                    return Promise.reject(new Error("По вашему запросу нет результатов"));
+                })
                 .then(pictures => this.setState({ pictures: pictures.hits, status: 'resolved' }))
+                .catch(error => this.setState({ error, status: 'rejected' }));
         }
+
+
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+        });
+
+
 
 
     }
@@ -38,13 +55,7 @@ class ImageGallery extends React.Component {
             .then(res => res.json())
             .then(pictures => this.setState(prevState => ({ pictures: [...prevState.pictures, ...pictures.hits], status: 'resolved' })))
 
-
     }
-
-
-
-
-
 
 
     render() {
@@ -53,17 +64,20 @@ class ImageGallery extends React.Component {
 
         return (
             <>
+
+                {status === 'pending' && <Loader type="Puff"
+                    color="#00BFFF"
+                    height={100}
+                    width={100}
+                    timeout={3000} />}
+
                 <ul className="ImageGallery">
-                    {pictures && pictures.map(({ id, webformatURL, tag }) => {
-                        return (
-                            <li key={id} className="ImageGalleryItem" >
-                                <img src={webformatURL} alt={tag} className="ImageGalleryItem-image" />
-                            </li>
-                        )
-                    })}
+                    {pictures && <ImageGalleryItem pictures={pictures} />}
+                    {pictures === [] && <h1>Ничего не найдено</h1>}
                 </ul>
 
                 {pictures && <Button onClick={this.handleLoadMore} />}
+
 
 
             </>
@@ -73,3 +87,4 @@ class ImageGallery extends React.Component {
 }
 
 export default ImageGallery;
+
