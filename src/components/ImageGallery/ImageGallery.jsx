@@ -73,7 +73,7 @@ class ImageGallery extends React.Component {
 
                 <ul className="ImageGallery">
                     {pictures && <ImageGalleryItem pictures={pictures} />}
-                    {pictures === [] && <h1>Ничего не найдено</h1>}
+
                 </ul>
 
                 {pictures && <Button onClick={this.handleLoadMore} />}
