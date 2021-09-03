@@ -19,12 +19,14 @@ class ImageGallery extends React.Component {
         const nextPicture = this.props.searchRequest;
 
         if (prevPicture !== nextPicture) {
-            this.setState({ status: 'pending', page: 1 })
+            this.setState({ status: 'pending', page: 1, pictures: null })
 
             fetch(`https://pixabay.com/api/?q=${nextPicture}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
                 .then(res => res.json())
                 .then(pictures => this.setState({ pictures: pictures.hits, status: 'resolved' }))
         }
+
+
     }
 
     handleLoadMore = () => {
@@ -34,7 +36,8 @@ class ImageGallery extends React.Component {
 
         fetch(`https://pixabay.com/api/?q=${this.props.searchRequest}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
             .then(res => res.json())
-            .then(pictures => this.setState({ pictures: pictures.hits, status: 'resolved' }))
+            .then(pictures => this.setState(prevState => ({ pictures: [...prevState.pictures, ...pictures.hits], status: 'resolved' })))
+
 
     }
 
