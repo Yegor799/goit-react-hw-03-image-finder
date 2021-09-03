@@ -1,5 +1,6 @@
 import React from 'react';
-import './ImageGallery.css'
+import './ImageGallery.css';
+import Button from '../Button/Button';
 
 const API_KEY = '18976162-4407e31cd80a0810b100a4c9f';
 
@@ -18,13 +19,27 @@ class ImageGallery extends React.Component {
         const nextPicture = this.props.searchRequest;
 
         if (prevPicture !== nextPicture) {
-            this.setState({ status: 'pending' })
+            this.setState({ status: 'pending', page: 1 })
 
             fetch(`https://pixabay.com/api/?q=${nextPicture}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
                 .then(res => res.json())
                 .then(pictures => this.setState({ pictures: pictures.hits, status: 'resolved' }))
         }
     }
+
+    handleLoadMore = () => {
+        this.setState(prevState => ({
+            page: prevState.page + 1,
+        }))
+
+        fetch(`https://pixabay.com/api/?q=${this.props.searchRequest}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
+            .then(res => res.json())
+            .then(pictures => this.setState({ pictures: pictures.hits, status: 'resolved' }))
+
+    }
+
+
+
 
 
 
@@ -44,6 +59,10 @@ class ImageGallery extends React.Component {
                         )
                     })}
                 </ul>
+
+                {pictures && <Button onClick={this.handleLoadMore} />}
+
+
             </>
 
         )
