@@ -1,5 +1,4 @@
 import React from 'react';
-import './ImageGallery.css';
 import Button from '../Button/Button';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Loader from "react-loader-spinner";
@@ -60,29 +59,67 @@ class ImageGallery extends React.Component {
 
     render() {
         const { pictures, error, status } = this.state;
-        const { searchRequest } = this.props;
 
-        return (
-            <>
 
-                {status === 'pending' && <Loader type="Puff"
+
+        if (status === 'idle') {
+            return <></>
+        }
+
+        if (status === 'pending') {
+            return (
+                <Loader type="Puff"
                     color="#00BFFF"
                     height={100}
                     width={100}
-                    timeout={3000} />}
+                    timeout={3000} />
+            )
+        }
 
-                <ul className="ImageGallery">
-                    {pictures && <ImageGalleryItem pictures={pictures} />}
+        if (status === 'rejected') {
+            return <h1>{error.message}</h1>
+        }
 
-                </ul>
+        if (status === 'resolved') {
+            return (
+                <>
+                    <ImageGalleryItem pictures={pictures} />
+                    {/* <Button onClick={this.handleLoadMore} /> */}
+                </>
+            )
+        }
 
-                {pictures && <Button onClick={this.handleLoadMore} />}
+        if (pictures.length !== 0) {
+            return (
+                <Button onClick={this.handleLoadMore} />
+            )
+        }
 
 
 
-            </>
+        // return (
+        //     <>
 
-        )
+
+
+        //         {status === 'pending' && <Loader type="Puff"
+        //             color="#00BFFF"
+        //             height={100}
+        //             width={100}
+        //             timeout={3000} />}
+
+
+        //         {pictures && <ImageGalleryItem pictures={pictures} />}
+
+
+
+        //         {pictures && <Button onClick={this.handleLoadMore} />}
+
+
+
+        //     </>
+
+        // )
     }
 }
 
