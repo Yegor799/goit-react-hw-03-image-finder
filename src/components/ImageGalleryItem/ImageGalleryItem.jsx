@@ -8,7 +8,7 @@ function ImageGalleryItem({ pictures }) {
             {pictures.map((picture, idx) => {
                 return (
                     < li key={idx} className="ImageGalleryItem" >
-                        <img src={picture.webformatURL} alt={picture.tag} className="ImageGalleryItem-image" />
+                        <img src={picture.webformatURL} data-source={picture.largeImageURL} alt={picture.tag} className="ImageGalleryItem-image" />
                     </li >
                 )
             })}
