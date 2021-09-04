@@ -35,10 +35,7 @@ class ImageGallery extends React.Component {
                 .catch(error => this.setState({ error, status: 'rejected' }));
         }
 
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth',
-        });
+       
     }
 
     handleLoadMore = () => {
