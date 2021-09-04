@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '../Button/Button';
+
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -34,15 +35,10 @@ class ImageGallery extends React.Component {
                 .catch(error => this.setState({ error, status: 'rejected' }));
         }
 
-
         window.scrollTo({
             top: document.documentElement.scrollHeight,
             behavior: 'smooth',
         });
-
-
-
-
     }
 
     handleLoadMore = () => {
@@ -55,7 +51,6 @@ class ImageGallery extends React.Component {
             .then(pictures => this.setState(prevState => ({ pictures: [...prevState.pictures, ...pictures.hits], status: 'resolved' })))
 
     }
-
 
     render() {
         const { pictures, error, status } = this.state;
@@ -84,42 +79,11 @@ class ImageGallery extends React.Component {
             return (
                 <>
                     <ImageGalleryItem pictures={pictures} />
-                    {/* <Button onClick={this.handleLoadMore} /> */}
+                    <Button onClick={this.handleLoadMore} />
+
                 </>
             )
         }
-
-        if (pictures.length !== 0) {
-            return (
-                <Button onClick={this.handleLoadMore} />
-            )
-        }
-
-
-
-        // return (
-        //     <>
-
-
-
-        //         {status === 'pending' && <Loader type="Puff"
-        //             color="#00BFFF"
-        //             height={100}
-        //             width={100}
-        //             timeout={3000} />}
-
-
-        //         {pictures && <ImageGalleryItem pictures={pictures} />}
-
-
-
-        //         {pictures && <Button onClick={this.handleLoadMore} />}
-
-
-
-        //     </>
-
-        // )
     }
 }
 
